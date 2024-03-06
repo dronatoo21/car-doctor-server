@@ -15,7 +15,6 @@ app.use(cors({
 app.use(express.json())
 app.use(cookieParser())
 
-
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.tcccoqk.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -81,6 +80,11 @@ async function run() {
         sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         })
       .send({success: true,});
+    })
+
+    app.post('/logout', async(req, res) => {
+      const user = req.body;
+      res.clearCookie('token', {maxAge: 0}).send({success: true });
     })
     app.get('/services/:id', async(req, res) => {
         const id = req.params.id;
